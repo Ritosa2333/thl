@@ -1,0 +1,6 @@
+.local/
+artifacts/
+build/
+dist/
+*.log
+__pycache__/

@@ -1,0 +1,448 @@
+{
+  "schema": "thl/nat4/results/1",
+  "date": "2026-10-28",
+  "dependencies": {
+    "libdatachannel": "bdc5ff28e9d3b863144c94a677ecf5bf043aaf15",
+    "libjuice": "b89c792e3612faf2f12cf35bcc56857313a06be3"
+  },
+  "nativeBinarySha256": "643effb5c1da409494cb22391ab179c55765b657f78274c2b8c373a079fad5a1",
+  "sourceSha256": {
+    "current": {
+      "CMakeLists.txt": "cfabb46a6328e893ef48ed762c5f8103539c3f234719555c72632b68e2c7e440",
+      "live_udp_nat.py": "c202b9aea05cb3f5d526cf91da03dec41e3c4d304ce9b988fa6ad9392d6312d5",
+      "punch_peer.py": "61e7a428fb7a57b45ed2da972e76f4688060c85c41326c79a220ae85cf8afbf7",
+      "live_native_lab.py": "5cbf3e6093991452a79d87705e9a9525ae0ac0cc70d6cdc8556c779938a82c07",
+      "nat_gateway.py": "a862542c3777b053975d5e436f392ab9e984aa27cd1d65593692845c7315e171",
+      "native_peer.cpp": "bf65a52056de94107b7e135027266dceecc8c230278faacf1b8d12b70084b603",
+      "run_lab.py": "ec6c50e7535a911ccc6bdd6a77ceb33d3b18b8a8e5b5d95fc4d7f79c2abe98a8"
+    },
+    "reference": {
+      "native_peer.cpp": "bf65a52056de94107b7e135027266dceecc8c230278faacf1b8d12b70084b603",
+      "run_lab.py": "09890b6240f14b8fe7b289bc9d4df44eb34bff83f52d28fc8e004cc931ce90d1",
+      "live_native_lab.py": "4e63124ed901c66dcab25931ed79cbab8921ef8d779feffe62351bf01571b623",
+      "live_udp_nat.py": "5928f96f1ebb4d6b865379986684d92c4977a60f0a2b3e354348cd64ba9e394e",
+      "nat_gateway.py": "a862542c3777b053975d5e436f392ab9e984aa27cd1d65593692845c7315e171"
+    }
+  },
+  "profile": {
+    "platform": "Linux x86_64",
+    "publicTopology": "two servers with controlled UDP gateways; one server also uses cloud NAT",
+    "filter": "exact source IPv4 and port",
+    "mappingLifetime": "fixed within each trial",
+    "payloadBytes": 96,
+    "inputChannel": "unordered, zero retransmissions",
+    "controlChannel": "ordered, reliable",
+    "transport": "ICE / DTLS / SCTP",
+    "signaling": "authenticated SSH for public trials",
+    "turnConfigured": false,
+    "pauseBehavior": "application sending pauses while ICE keepalive continues"
+  },
+  "checks": [
+    {
+      "id": "public-01",
+      "purpose": "双向公网直传",
+      "environment": "public",
+      "sourceSet": "reference",
+      "strategy": "next-port",
+      "mapping": "address-and-port-dependent",
+      "allocation": "sequential",
+      "offer": "a",
+      "packetsPerEndpoint": 300,
+      "pauseSeconds": 0,
+      "connected": true,
+      "dataVerified": true,
+      "wireVerified": true,
+      "predictionOffset": 1,
+      "cleanupComplete": true,
+      "perEndpoint": {
+        "b": {
+          "inputReceived": 300,
+          "inputEchoed": 300,
+          "controlReceived": 30,
+          "controlEchoed": 30,
+          "errors": 0,
+          "orderErrors": 0
+        },
+        "a": {
+          "inputReceived": 300,
+          "inputEchoed": 300,
+          "controlReceived": 30,
+          "controlEchoed": 30,
+          "errors": 0,
+          "orderErrors": 0
+        }
+      },
+      "selectedPeerEndpointsMatch": true,
+      "wire": {
+        "b": {
+          "stun": 7,
+          "dtlsHandshake": 3,
+          "dtlsApplication": 849,
+          "plaintextTestData": 0,
+          "other": 0
+        },
+        "a": {
+          "stun": 6,
+          "dtlsHandshake": 3,
+          "dtlsApplication": 841,
+          "plaintextTestData": 0,
+          "other": 0
+        }
+      },
+      "selectedPorts": {
+        "b": 50001,
+        "a": 40001
+      },
+      "gatewayDataFlowsMatch": true
+    },
+    {
+      "id": "public-02",
+      "purpose": "观测候选对照",
+      "environment": "public",
+      "sourceSet": "reference",
+      "strategy": "ice",
+      "mapping": "address-and-port-dependent",
+      "allocation": "sequential",
+      "offer": "a",
+      "packetsPerEndpoint": 300,
+      "pauseSeconds": 0,
+      "connected": false,
+      "dataVerified": false,
+      "wireVerified": false,
+      "cleanupComplete": true,
+      "wire": {
+        "b": {
+          "stun": 7,
+          "dtlsHandshake": 0,
+          "dtlsApplication": 0,
+          "plaintextTestData": 0,
+          "other": 0
+        },
+        "a": {
+          "stun": 7,
+          "dtlsHandshake": 0,
+          "dtlsApplication": 0,
+          "plaintextTestData": 0,
+          "other": 0
+        }
+      }
+    },
+    {
+      "id": "public-03",
+      "purpose": "公网持续传输与暂停恢复",
+      "environment": "public",
+      "sourceSet": "reference",
+      "strategy": "next-port",
+      "mapping": "address-and-port-dependent",
+      "allocation": "sequential",
+      "offer": "b",
+      "packetsPerEndpoint": 1800,
+      "pauseSeconds": 15,
+      "connected": true,
+      "dataVerified": true,
+      "wireVerified": true,
+      "predictionOffset": 1,
+      "cleanupComplete": true,
+      "perEndpoint": {
+        "b": {
+          "inputReceived": 1800,
+          "inputEchoed": 1800,
+          "controlReceived": 180,
+          "controlEchoed": 180,
+          "errors": 0,
+          "orderErrors": 0
+        },
+        "a": {
+          "inputReceived": 1800,
+          "inputEchoed": 1800,
+          "controlReceived": 180,
+          "controlEchoed": 180,
+          "errors": 0,
+          "orderErrors": 0
+        }
+      },
+      "selectedPeerEndpointsMatch": true,
+      "wire": {
+        "b": {
+          "stun": 23,
+          "dtlsHandshake": 3,
+          "dtlsApplication": 5114,
+          "plaintextTestData": 0,
+          "other": 0
+        },
+        "a": {
+          "stun": 22,
+          "dtlsHandshake": 2,
+          "dtlsApplication": 5103,
+          "plaintextTestData": 0,
+          "other": 0
+        }
+      },
+      "selectedPorts": {
+        "b": 50001,
+        "a": 40001
+      },
+      "gatewayDataFlowsMatch": true
+    },
+    {
+      "id": "public-04",
+      "purpose": "预测偏移校验",
+      "environment": "public",
+      "sourceSet": "reference",
+      "strategy": "next-port",
+      "mapping": "address-and-port-dependent",
+      "allocation": "sequential",
+      "offer": "a",
+      "packetsPerEndpoint": 300,
+      "pauseSeconds": 0,
+      "connected": false,
+      "dataVerified": false,
+      "wireVerified": false,
+      "predictionOffset": 2,
+      "cleanupComplete": true,
+      "wire": {
+        "b": {
+          "stun": 8,
+          "dtlsHandshake": 0,
+          "dtlsApplication": 0,
+          "plaintextTestData": 0,
+          "other": 0
+        },
+        "a": {
+          "stun": 8,
+          "dtlsHandshake": 0,
+          "dtlsApplication": 0,
+          "plaintextTestData": 0,
+          "other": 0
+        }
+      }
+    },
+    {
+      "id": "public-05",
+      "purpose": "对端身份校验",
+      "environment": "public",
+      "sourceSet": "reference",
+      "strategy": "next-port",
+      "mapping": "address-and-port-dependent",
+      "allocation": "sequential",
+      "offer": "a",
+      "packetsPerEndpoint": 300,
+      "pauseSeconds": 0,
+      "connected": false,
+      "dataVerified": false,
+      "wireVerified": false,
+      "predictionOffset": 1,
+      "modifiedPeerFingerprint": true,
+      "cleanupComplete": true,
+      "wire": {
+        "b": {
+          "stun": 5,
+          "dtlsHandshake": 2,
+          "dtlsApplication": 0,
+          "plaintextTestData": 0,
+          "other": 0
+        },
+        "a": {
+          "stun": 4,
+          "dtlsHandshake": 1,
+          "dtlsApplication": 0,
+          "plaintextTestData": 0,
+          "other": 0
+        }
+      }
+    },
+    {
+      "id": "public-06",
+      "purpose": "端口分配条件",
+      "environment": "public",
+      "sourceSet": "reference",
+      "strategy": "next-port",
+      "mapping": "address-and-port-dependent",
+      "allocation": "random",
+      "offer": "a",
+      "packetsPerEndpoint": 300,
+      "pauseSeconds": 0,
+      "connected": false,
+      "dataVerified": false,
+      "wireVerified": false,
+      "predictionOffset": 1,
+      "seed": 7,
+      "cleanupComplete": true,
+      "wire": {
+        "b": {
+          "stun": 8,
+          "dtlsHandshake": 0,
+          "dtlsApplication": 0,
+          "plaintextTestData": 0,
+          "other": 0
+        },
+        "a": {
+          "stun": 8,
+          "dtlsHandshake": 0,
+          "dtlsApplication": 0,
+          "plaintextTestData": 0,
+          "other": 0
+        }
+      }
+    },
+    {
+      "id": "isolated-1",
+      "purpose": "协调预测回归",
+      "environment": "isolated",
+      "sourceSet": "current",
+      "strategy": "next-port",
+      "mapping": "address-and-port-dependent",
+      "allocation": "sequential",
+      "offer": "b",
+      "packetsPerEndpoint": 300,
+      "pauseSeconds": 0,
+      "connected": true,
+      "dataVerified": true,
+      "wireVerified": true,
+      "predictionOffset": 1,
+      "perEndpoint": {
+        "a": {
+          "inputReceived": 300,
+          "inputEchoed": 300,
+          "controlReceived": 30,
+          "controlEchoed": 30,
+          "errors": 0,
+          "orderErrors": 0
+        },
+        "b": {
+          "inputReceived": 300,
+          "inputEchoed": 300,
+          "controlReceived": 30,
+          "controlEchoed": 30,
+          "errors": 0,
+          "orderErrors": 0
+        }
+      }
+    },
+    {
+      "id": "isolated-2",
+      "purpose": "扫描与端口轮换交接",
+      "environment": "isolated",
+      "sourceSet": "current",
+      "strategy": "nat22",
+      "mapping": "address-dependent",
+      "allocation": "sequential",
+      "offer": "b",
+      "packetsPerEndpoint": 300,
+      "pauseSeconds": 0,
+      "connected": true,
+      "dataVerified": true,
+      "wireVerified": true,
+      "perEndpoint": {
+        "a": {
+          "inputReceived": 300,
+          "inputEchoed": 300,
+          "controlReceived": 30,
+          "controlEchoed": 30,
+          "errors": 0,
+          "orderErrors": 0
+        },
+        "b": {
+          "inputReceived": 300,
+          "inputEchoed": 300,
+          "controlReceived": 30,
+          "controlEchoed": 30,
+          "errors": 0,
+          "orderErrors": 0
+        }
+      }
+    },
+    {
+      "id": "current-public-1",
+      "purpose": "公网持续传输与暂停恢复",
+      "environment": "public",
+      "sourceSet": "current",
+      "strategy": "next-port",
+      "mapping": "address-and-port-dependent",
+      "allocation": "sequential",
+      "offer": "b",
+      "packetsPerEndpoint": 1800,
+      "pauseSeconds": 15,
+      "connected": true,
+      "dataVerified": true,
+      "wireVerified": true,
+      "predictionOffset": 1,
+      "cleanupComplete": true,
+      "perEndpoint": {
+        "b": {
+          "inputReceived": 1800,
+          "inputEchoed": 1800,
+          "controlReceived": 180,
+          "controlEchoed": 180,
+          "errors": 0,
+          "orderErrors": 0
+        },
+        "a": {
+          "inputReceived": 1800,
+          "inputEchoed": 1800,
+          "controlReceived": 180,
+          "controlEchoed": 180,
+          "errors": 0,
+          "orderErrors": 0
+        }
+      },
+      "selectedPeerEndpointsMatch": true,
+      "wire": {
+        "b": {
+          "stun": 23,
+          "dtlsHandshake": 3,
+          "dtlsApplication": 5166,
+          "plaintextTestData": 0,
+          "other": 0
+        },
+        "a": {
+          "stun": 22,
+          "dtlsHandshake": 3,
+          "dtlsApplication": 5195,
+          "plaintextTestData": 0,
+          "other": 0
+        }
+      },
+      "selectedPorts": {
+        "b": 50001,
+        "a": 40001
+      },
+      "gatewayDataFlowsMatch": true
+    },
+    {
+      "id": "current-public-2",
+      "purpose": "对端身份校验",
+      "environment": "public",
+      "sourceSet": "current",
+      "strategy": "next-port",
+      "mapping": "address-and-port-dependent",
+      "allocation": "sequential",
+      "offer": "a",
+      "packetsPerEndpoint": 300,
+      "pauseSeconds": 0,
+      "connected": false,
+      "dataVerified": false,
+      "wireVerified": false,
+      "predictionOffset": 1,
+      "modifiedPeerFingerprint": true,
+      "cleanupComplete": true,
+      "wire": {
+        "b": {
+          "stun": 5,
+          "dtlsHandshake": 2,
+          "dtlsApplication": 0,
+          "plaintextTestData": 0,
+          "other": 0
+        },
+        "a": {
+          "stun": 4,
+          "dtlsHandshake": 1,
+          "dtlsApplication": 0,
+          "plaintextTestData": 0,
+          "other": 0
+        }
+      }
+    }
+  ],
+  "sourceHashFormat": "UTF-8 with LF line endings"
+}
